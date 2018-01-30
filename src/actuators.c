@@ -36,33 +36,24 @@ void setLightLevel(double level) {
     int changed = 0;
 
     pthread_mutex_lock(&mutexActuators);
-    if(lumen-newVal < -1e-2 || lumen-newVal > 1e-2) {
-        lumen = newVal;
-        changed=1;
-    }
+    lumen = newVal;
     pthread_mutex_unlock(&mutexActuators);
 
-    if(changed) {
-        setColor(color);
-    }
+    setColor(color,newVal);
 }
 
-void setColor(Color c) {
-    pthread_mutex_lock(&mutexActuators);
-    uchar val = lumen;
-    pthread_mutex_unlock(&mutexActuators);
-
+void setColor(Color c, uchar l) {
     switch(c) {
     case RED:
-        ledColorSet(val,100,100);
+        ledColorSet(l,100,100);
         break;
 
     case GREEN:
-        ledColorSet(100,val,100);
+        ledColorSet(100,l,100);
         break;
 
     case BLUE:
-        ledColorSet(100,100,val);
+        ledColorSet(100,100,l);
         break;
 
     default:
@@ -70,21 +61,38 @@ void setColor(Color c) {
     }
 }
 
+void dualSetColor(int i) {
+    if(i < 0) { // green
+	softPwmWrite(DualGreenPin, 100);
+        softPwmWrite(DualRedPin, 0);
+    }
+    else if(i > 0) { // red
+        softPwmWrite(DualGreenPin, 0);
+        softPwmWrite(DualRedPin, 100);
+    }
+    else { // no color
+        softPwmWrite(DualGreenPin, 0);
+        softPwmWrite(DualRedPin, 0);
+    }
+}
+
 void* updateActuators(void* arg) {
     ledInit();
 
     Color curColor = color;
+    uchar curLumen = lumen;
     int changed = 1;
     while(1) {
         pthread_mutex_lock(&mutexActuators);
         if(color != curColor) {
             curColor = color;
+            curLumen = lumen;
             changed = 1;
         }
         pthread_mutex_unlock(&mutexActuators);
 
         if(changed) {
-            setColor(curColor);
+            setColor(curColor,curLumen);
             changed = 0;
         }
 
@@ -97,6 +105,9 @@ void ledInit(void)
     softPwmCreate(LedPinRed,  0, 100);
     softPwmCreate(LedPinGreen,0, 100);
     softPwmCreate(LedPinBlue, 0, 100);
+
+    softPwmCreate(DualRedPin, 0, 100);
+    softPwmCreate(DualGreenPin, 0, 100);
 }
 
 void ledColorSet(uchar r_val, uchar g_val, uchar b_val)

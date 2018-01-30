@@ -9,7 +9,7 @@ OBJ_DIR	= build
 
 all:	$(EXEC)
 
-$(EXEC): $(OBJ_DIR)/sensorsManager.o $(OBJ_DIR)/actuators.o $(OBJ_DIR)/lightsManager.o $(OBJ_DIR)/main.o
+$(EXEC): $(OBJ_DIR)/sensorsManager.o $(OBJ_DIR)/actuators.o $(OBJ_DIR)/networkInterface.o $(OBJ_DIR)/lightsManager.o $(OBJ_DIR)/main.o
 	$(CC) $(CFLAGS) $^ -o $(EXEC) $(LFLAGS)
 
 $(OBJ_DIR)/main.o: $(SRC_DIR)/main.c
@@ -19,6 +19,9 @@ $(OBJ_DIR)/main.o: $(SRC_DIR)/main.c
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(SRC_DIR)/%.h
 	@mkdir -p $(OBJ_DIR)
 	$(CC) -c $< -o $@ $(CFLAGS)
+
+client: $(OBJ_DIR)/client.o
+	$(CC) $(CFLAGS) $^ -o smartHouseClient $(LFLAGS)
 
 photoresistor:
 	gcc -o photoresistor src/photoresistor.c -lwiringPi
@@ -36,3 +39,7 @@ clean:
 
 mrproper: clean
 	rm -rf $(EXEC)
+	rm -rf smartHouseClient
+	rm -rf photoresistor
+	rm -rf soundsensor
+	rm -rf pcf8591

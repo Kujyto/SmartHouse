@@ -13,7 +13,7 @@
 #define MAX_COUNT 10
 #define MIN_COUNT 1
 
-#define SOUND_LIMIT 50
+#define SOUND_LIMIT 5
 
 void* detectClap(void* arg);
 

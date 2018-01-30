@@ -3,8 +3,9 @@
 #include "clap.h"
 #include "actuators.h"
 #include "lightsManager.h"
+#include "networkInterface.h"
 
-pthread_t tid[3];
+pthread_t tid[4];
 
 int main() {
     int err;
@@ -19,6 +20,7 @@ int main() {
     err = pthread_create(tid+0, NULL, &sensorsManager, NULL);
     err = pthread_create(tid+1, NULL, &updateActuators, NULL);
     err = pthread_create(tid+2, NULL, &lightsManager, NULL);
+    err = pthread_create(tid+3, NULL, &networkManager, NULL);
     //err = pthread_create(tid+..., NULL, &detectClap, NULL); // does not work
 
     int v;
@@ -26,11 +28,9 @@ int main() {
         printf("Value: ");
         scanf("%d", &v);
 
-        if(v > 0) {
-            changeColor();
-        }
+        dualSetColor(v);
 
-        if(v == -1)
+        if(v < -1)
             break;
     }
 

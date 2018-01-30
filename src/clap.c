@@ -1,5 +1,7 @@
 #include "clap.h"
 
+#define DELAY_SENSORS 20
+
 // TODO: be sure
 void* detectClap(void* arg) {
     int soundVal;
