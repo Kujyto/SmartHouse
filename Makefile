@@ -21,7 +21,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(SRC_DIR)/%.h
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 client: $(OBJ_DIR)/client.o
-	$(CC) $(CFLAGS) $^ -o smartHouseClient $(LFLAGS)
+	$(CC) $(CFLAGS) $^ -o smartHouseClient
 
 photoresistor:
 	gcc -o photoresistor src/photoresistor.c -lwiringPi
