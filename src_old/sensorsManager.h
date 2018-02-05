@@ -10,7 +10,7 @@
 
 void* sensorsManager(void* arg);
 
-int getSoundVal(); // non pertinent
+int getSoundVal();
 int getLumenVal();
 double getHumidity();
 double getTemperature();

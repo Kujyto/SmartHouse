@@ -13,18 +13,7 @@
 #include <time.h>
 
 #include "messageDefinition.h"
-#include "portableSockets.h"
-
-#include "sensorsManager.h"
-
-#define SENDER_PORT 5001 // raspberry sender port
-
-#define DELAY_SENDER 1000 // 1sec
-
-void setServerAddrr(const char* src);
 
 void* networkManager(void* arg);
-
-void* dataSender(void* arg); // send data via UDP
 
 #endif

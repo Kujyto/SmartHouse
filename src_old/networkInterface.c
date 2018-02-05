@@ -1,21 +1,6 @@
 #include "networkInterface.h"
 
-char serverAddress[255];
-
-void setServerAddrr(const char* src) {
-    memset(serverAddress, '\0', sizeof(serverAddress));
-    strcpy(serverAddress, src);
-}
-
 void* networkManager(void* arg) {
-    pthread_t tid[2];
-    int err;
-
-    err = pthread_create(tid+0, NULL, &dataSender, NULL);
-
-    pthread_join(*(tid+0), NULL);
-
-    /*
     char recvBuff[255];
     char sendBuff[255];
 
@@ -65,42 +50,8 @@ void* networkManager(void* arg) {
 
         close(connfd);
     }
-    */
 }
 
-void* dataSender(void* arg) {
-    int sock = 0;
-    int n = 0;
-    struct sockaddr_in servAddr;
+void udp() {
 
-    int noError = 1;
-    AllData msg;
-
-    while(noError) {
-        delay(DELAY_SENDER);
-
-        // get data
-        msg.lumen = getLumenVal();
-        msg.sound = 0;
-        msg.humidity = getHumidity();
-        msg.temperature = getTemperature();
-
-
-        // send data
-        memset(&servAddr, '0', sizeof(servAddr));
-        servAddr.sin_family = AF_INET;
-        servAddr.sin_port = htonl(SENDER_PORT);
-
-        if(inet_pton(AF_INET, serverAddress, &servAddr.sin_addr) <= 0) {
-            perror("inet_pton()");
-            continue;
-        }
-
-        if(connect(sock, (struct sockaddr*)&servAddr, sizeof(servAddr)) < 0) {
-            perror("connect()");
-            continue;
-        }
-
-        send(sock, &msg, sizeof(msg), 0);
-    }
 }
