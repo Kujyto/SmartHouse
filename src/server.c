@@ -16,8 +16,8 @@ void printMsg(AllData msg) {
     printf("====================\n");
     printf("Lumen: %d\n", msg.lumen);
     printf("Sound: %d\n", msg.sound);
-    printf("Humidity: %f\n", msg.humidity);
-    printf("Temperature: %f\n", msg.temperature);
+    printf("Humidity: %3.1f\n", msg.humidity);
+    printf("Temperature: %3.1f\n", msg.temperature);
     printf("====================\n");
 }
 
@@ -32,7 +32,7 @@ void* listener(void* arg) {
     listenfd = socket(AF_INET, SOCK_STREAM, 0);
     if(listenfd == -1) {
         perror("socket()");
-        return;
+        return NULL;
     }
 
     int enable = 1;
