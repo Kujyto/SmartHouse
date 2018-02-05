@@ -1,6 +1,5 @@
 #include "definition.h"
 
-#include "clap.h"
 #include "actuators.h"
 #include "lightsManager.h"
 #include "networkInterface.h"
@@ -22,6 +21,7 @@ int main() {
     err = pthread_create(tid+2, NULL, &lightsManager, NULL);
     err = pthread_create(tid+3, NULL, &networkManager, NULL);
     //err = pthread_create(tid+..., NULL, &detectClap, NULL); // does not work
+
 
     int v;
     while(1) {
