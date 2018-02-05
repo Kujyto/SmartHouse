@@ -5,12 +5,16 @@
 
 #define GET_TEMP "getTemp"
 
-typedef enum {LUMEN, SOUND, HUMIDITY, TEMPERATURE} DataType;
+typedef enum {
+    LUMEN, // light level
+    CHANGE_COLOR,
+    HEATER // > 0 heater, < 0 air-conditioner, 0 off
+} DataType;
 
 typedef struct {
     DataType type;
     double value;
-} SensorsData;
+} ActuatorData;
 
 typedef struct {
     int lumen;

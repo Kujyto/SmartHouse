@@ -19,7 +19,7 @@ int main(int argc, char** argv) {
     }
     pcf8591Setup(PCF, 0x48);
 
-    setServerAddrr(argv[1]);
+    setServerAddr(argv[1]);
 
     err = pthread_create(tid+0, NULL, &sensorsManager, NULL);
     //err = pthread_create(tid+1, NULL, &updateActuators, NULL);

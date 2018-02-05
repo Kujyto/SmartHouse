@@ -1,6 +1,27 @@
 #include "server.h"
 
 int main() {
+    pthread_t tid[2];
+    int err;
+
+    err = pthread_create(tid+0, NULL, &listener, NULL);
+
+    pthread_join(tid[0], NULL);
+
+    return 0;
+}
+
+
+void printMsg(AllData msg) {
+    printf("====================\n");
+    printf("Lumen: %d\n", msg.lumen);
+    printf("Sound: %d\n", msg.sound);
+    printf("Humidity: %f\n", msg.humidity);
+    printf("Temperature: %f\n", msg.temperature);
+    printf("====================\n");
+}
+
+void* listener(void* arg) {
     int listenfd = 0;
     int connfd = 0;
     int n = 0;
@@ -42,14 +63,4 @@ int main() {
 
         printMsg(msg);
     }
-}
-
-
-void printMsg(AllData msg) {
-    printf("====================\n");
-    printf("Lumen: %d\n", msg.lumen);
-    printf("Sound: %d\n", msg.sound);
-    printf("Humidity: %f\n", msg.humidity);
-    printf("Temperature: %f\n", msg.temperature);
-    printf("====================\n");
 }

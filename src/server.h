@@ -12,10 +12,14 @@
 #include <sys/types.h>
 #include <time.h>
 
+#include <pthread.h>
+
 #include "messageDefinition.h"
 
 #define RECV_PORT 5001 // recever port
 
 void printMsg(AllData msg);
+
+void* listener(void* arg);
 
 #endif

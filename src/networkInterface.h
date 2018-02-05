@@ -21,7 +21,7 @@
 
 #define DELAY_SENDER 1000 // 1sec
 
-void setServerAddrr(const char* src);
+void setServerAddr(const char* src);
 
 void* networkManager(void* arg);
 

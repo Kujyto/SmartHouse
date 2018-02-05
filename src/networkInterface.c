@@ -2,9 +2,11 @@
 
 char serverAddress[255];
 
-void setServerAddrr(const char* src) {
+void setServerAddr(const char* src) {
+    printf("%s\n", src);
     memset(serverAddress, '\0', sizeof(serverAddress));
     strcpy(serverAddress, src);
+    printf("%s\n", serverAddress);
 }
 
 void* networkManager(void* arg) {
@@ -58,7 +60,7 @@ void* networkManager(void* arg) {
             printf("Nothing\n");
             close(connfd);
             continue;
-        }
+            }
         recvBuff[n] = '\0';
 
         printf("Recv: %s\n", recvBuff);
@@ -87,9 +89,15 @@ void* dataSender(void* arg) {
 
 
         // send data
+        sock = socket(AF_INET, SOCK_STREAM, 0);
+        if(sock == -1) {
+            perror("socket()");
+            continue;
+        }
+
         memset(&servAddr, '0', sizeof(servAddr));
         servAddr.sin_family = AF_INET;
-        servAddr.sin_port = htonl(SENDER_PORT);
+        servAddr.sin_port = htons(SENDER_PORT);
 
         if(inet_pton(AF_INET, serverAddress, &servAddr.sin_addr) <= 0) {
             perror("inet_pton()");
