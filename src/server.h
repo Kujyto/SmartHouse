@@ -19,6 +19,8 @@
 #define RECV_PORT 5001 // recever port
 #define SEND_PORT 5002
 
+#define DELTA_TEMP 1
+
 void setClientAddr(const char* src);
 void printMsg(AllData msg);
 

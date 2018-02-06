@@ -4,6 +4,14 @@ char clientAddress[255];
 
 double temperatureGoal = 20;
 
+int heater = 0;
+double temp = 20;
+static pthread_mutex_t mutexTemp = PTHREAD_MUTEX_INITIALIZER;
+
+int lumen = 0;
+static pthread_mutex_t mutexLumen = PTHREAD_MUTEX_INITIALIZER;
+
+
 int main(int argc, char** argv) {
     if(argc != 2) {
         printf("Usage: %s <ip of client>\n", argv[0]);
@@ -38,6 +46,16 @@ void printMsg(AllData msg) {
     printf("Humidity: %3.1f\n", msg.humidity);
     printf("Temperature: %3.1f\n", msg.temperature);
     printf("====================\n");
+}
+
+void updateValues(AllData msg) {
+    pthread_mutex_lock(&mutexTemp);
+    temp = msg.temperature;
+    pthread_mutex_unlock(&mutexTemp);
+
+    pthread_mutex_lock(&mutexLumen);
+    lumen = msg.lumen;
+    pthread_mutex_unlock(&mutexLumen);
 }
 
 void* listener(void* arg) {
@@ -80,8 +98,26 @@ void* listener(void* arg) {
             continue;
         }
 
+        updateValues(msg);
         printMsg(msg);
     }
+}
+
+double getLightLevel() {
+    pthread_mutex_lock(&mutexLumen);
+    int lumenVal = lumen;
+    pthread_mutex_unlock(&mutexLumen);
+
+    int lightPercent = 100 * (lumenVal-LIGHT_MIN) / (LIGHT_MAX - LIGHT_MIN);
+
+    if(lightPercent < 1) {
+        lightPercent = 1;
+    }
+    else if(lightPercent > 100) {
+        lightPercent = 100;
+    }
+
+    return (100-preLightPercent) / 100.0;
 }
 
 void* sender(void* arg) {
@@ -94,9 +130,6 @@ void* sender(void* arg) {
 
     while(noError) {
         sleep(5);
-
-        msg.type = CHANGE_COLOR;
-        msg.value = 0;
 
         // send data
         sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -120,6 +153,34 @@ void* sender(void* arg) {
             continue;
         }
 
-        send(sock, &msg, sizeof(msg), 0);
+
+        // temperature manager
+        msg.type = HEATER;
+        msg.value = -1000;
+        pthread_mutex_lick(&mutexTemp);
+        if(temp >= temperatureGoal) {
+            if(temp > temperatureGoal + DELTA_TEMP && heater >= 0) {
+                msg.value = -1;
+            }
+            else if(heater > 0) {
+                msg.value = 0;
+            }
+        }
+        else if(temp <= temperatueGoal) {
+            if(temp < temperatureGoal - DELTA_TEMP && heater <= 0) {
+                msg.value = 1;
+            }
+            else if(heater < 0) {
+                msg.value = 0;
+            }
+        }
+
+        if(msg.value > -100)
+            send(sock, &msg, sizeof(msg), 0);
+
+        // light manager
+        msg.type = LUMEN;
+        msg.value = getLightLevel();
+        send(sock, &msg, sizeof(msg),0);
     }
 }
