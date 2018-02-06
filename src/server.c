@@ -121,7 +121,7 @@ void* sender(void* arg) {
 
         printf("DEBUG5\n");
 
-        if(send(sock, &msg, sizeof(msg), 0) < 0) {
+        if(send(sock, &msg, sizeof(msg), 1) < 0) {
             perror("send()");
             continue;
         }

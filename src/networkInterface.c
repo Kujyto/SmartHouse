@@ -149,7 +149,7 @@ void* commandReceiver(void* arg) {
     while(1) {
         connfd = accept(listenfd, (struct sockaddr*)NULL, NULL);
 
-        if((n = recv(connfd, &msg, sizeof(msg),0)) < 0) {
+        if((n = recv(connfd, &msg, sizeof(msg),1)) < 0) {
             close(connfd);
             continue;
         }
