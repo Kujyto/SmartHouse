@@ -19,7 +19,7 @@
 #define RECV_PORT 5001 // recever port
 #define SEND_PORT 5002
 
-
+void setClientAddr(const char* src);
 void printMsg(AllData msg);
 
 void* listener(void* arg);

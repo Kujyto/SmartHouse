@@ -3,10 +3,10 @@
 char serverAddress[255];
 
 void setServerAddr(const char* src) {
-    printf("%s\n", src);
+    //printf("%s\n", src);
     memset(serverAddress, '\0', sizeof(serverAddress));
     strcpy(serverAddress, src);
-    printf("%s\n", serverAddress);
+    //printf("%s\n", serverAddress);
 }
 
 void* networkManager(void* arg) {

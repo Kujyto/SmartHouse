@@ -1,11 +1,17 @@
 #include "server.h"
 
-struct sockaddr_in clientAddr;
-int gotAddr = 0;
+char clientAddress[255];
 
 double temperatureGoal = 20;
 
-int main() {
+int main(int argc, char** argv) {
+    if(argc != 2) {
+        printf("Usage: %s <ip of client>\n", argv[0]);
+        return 1;
+    }
+
+    setClientAddr(argv[1]);
+
     pthread_t tid[2];
     int err;
 
@@ -15,6 +21,13 @@ int main() {
     pthread_join(tid[0], NULL);
 
     return 0;
+}
+
+void setClientAddr(const char* src) {
+    //printf("%s\n", src);
+    memset(clientAddress, '\0', sizeof(clientAddress));
+    strcpy(clientAddress, src);
+    //printf("%s\n", serverAddress);
 }
 
 
@@ -60,12 +73,7 @@ void* listener(void* arg) {
     listen(listenfd,2);
 
     while(1) {
-        if(!gotAddr) {
-            connfd = accept(listenfd, (struct sockaddr*)&clientAddr, NULL);
-            gotAddr = 1;
-        }
-        else
-            connfd = accept(listenfd, (struct sockaddr*)NULL, NULL);
+        connfd = accept(listenfd, (struct sockaddr*)NULL, NULL);
 
         if((n = recv(connfd, &msg, sizeof(msg),0)) < 0) {
             close(connfd);
@@ -77,11 +85,6 @@ void* listener(void* arg) {
 }
 
 void* sender(void* arg) {
-    // waiting for raspberry address
-    while(!gotAddr) {
-        sleep(5);
-    }
-
     int sock = 0;
     int n = 0;
     struct sockaddr_in servAddr;
@@ -107,9 +110,15 @@ void* sender(void* arg) {
 
         printf("DEBUG3\n");
 
-
-        servAddr = clientAddr;
+        memset(&servAddr, '0', sizeof(servAddr));
+        servAddr.sin_family = AF_INET;
         servAddr.sin_port = htons(SEND_PORT);
+
+        if(inet_pton(AF_INET, clientAddress, &servAddr.sin_addr) <= 0) {
+            perror("inet_pton()");
+            continue;
+        }
+
 
         printf("DEBUG4\n");
 
