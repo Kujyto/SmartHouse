@@ -150,6 +150,7 @@ void* commandReceiver(void* arg) {
         connfd = accept(listenfd, (struct sockaddr*)NULL, NULL);
 
         if((n = recv(connfd, &msg, sizeof(msg),1)) < 0) {
+            printf("no msg..\n");
             close(connfd);
             continue;
         }
@@ -161,14 +162,17 @@ void* commandReceiver(void* arg) {
 void handleCommand(ActuatorData command) {
     switch(command.type) {
     case LUMEN:
+        printf("lumen\n");
         setLightLevel(command.value);
         break;
 
     case CHANGE_COLOR:
+        printf("color\n");
         changeColor();
         break;
 
     case HEATER:
+        printf("heate\n");
         dualSetColor((int)(command.value));
         break;
 
