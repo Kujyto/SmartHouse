@@ -21,6 +21,9 @@
 
 #define DELTA_TEMP 1
 
+#define LIGHT_MIN 50
+#define LIGHT_MAX 200
+
 void setClientAddr(const char* src);
 void printMsg(AllData msg);
 

@@ -117,7 +117,7 @@ double getLightLevel() {
         lightPercent = 100;
     }
 
-    return (100-preLightPercent) / 100.0;
+    return (100-lightPercent) / 100.0;
 }
 
 void* sender(void* arg) {
@@ -166,7 +166,7 @@ void* sender(void* arg) {
                 msg.value = 0;
             }
         }
-        else if(temp <= temperatueGoal) {
+        else if(temp <= temperatureGoal) {
             if(temp < temperatureGoal - DELTA_TEMP && heater <= 0) {
                 msg.value = 1;
             }
