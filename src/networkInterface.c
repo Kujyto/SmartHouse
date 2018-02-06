@@ -149,8 +149,8 @@ void* commandReceiver(void* arg) {
     while(1) {
         connfd = accept(listenfd, (struct sockaddr*)NULL, NULL);
 
-        if((n = recv(connfd, &msg, sizeof(msg),1)) < 0) {
-            printf("no msg..\n");
+        if((n = recv(connfd, &msg, sizeof(msg),0)) < 0) {
+            perror("recv()");
             close(connfd);
             continue;
         }
