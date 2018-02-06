@@ -163,17 +163,17 @@ void* commandReceiver(void* arg) {
 void handleCommand(ActuatorData command) {
     switch(command.type) {
     case LUMEN:
-        printf("lumen\n");
+        //printf("lumen\n");
         setLightLevel(command.value);
         break;
 
     case CHANGE_COLOR:
-        printf("color\n");
+        //printf("color\n");
         changeColor();
         break;
 
     case HEATER:
-        printf("heate\n");
+        //printf("heate\n");
         dualSetColor((int)(command.value));
         break;
 

@@ -29,5 +29,6 @@ void printMsg(AllData msg);
 
 void* listener(void* arg);
 void* sender(void* arg);
+void* temperatureManager(void* arg);
 
 #endif

@@ -20,11 +20,12 @@ int main(int argc, char** argv) {
 
     setClientAddr(argv[1]);
 
-    pthread_t tid[2];
+    pthread_t tid[3];
     int err;
 
     err = pthread_create(tid+0, NULL, &listener, NULL);
     err = pthread_create(tid+1, NULL, &sender, NULL);
+    err = pthread_create(tid+2, NULL, &temperatureManager, NULL);
 
     pthread_join(tid[0], NULL);
 
@@ -32,10 +33,8 @@ int main(int argc, char** argv) {
 }
 
 void setClientAddr(const char* src) {
-    //printf("%s\n", src);
     memset(clientAddress, '\0', sizeof(clientAddress));
     strcpy(clientAddress, src);
-    //printf("%s\n", serverAddress);
 }
 
 
@@ -183,5 +182,36 @@ void* sender(void* arg) {
         msg.type = LUMEN;
         msg.value = getLightLevel();
         send(sock, &msg, sizeof(msg),0);
+    }
+}
+
+void clean(const char *buffer, FILE *fp) {
+    char *p = strchr(buffer,'\n');
+    if(p != NULL) {
+        *p = 0;
+    }
+    else {
+        int c;
+        while((c = fgetc(fp)) != '\n' && c != EOF);
+    }
+}
+
+void* temperatureManager(void* arg) {
+    int tempRef = temperatureGoal;
+
+    char s[255];
+
+    while(1) {
+        printf("Current temperature goal: %d\n", tempRef);
+        printf("New temperature goal: ");
+
+        fgets(s, sizeof(s), stdin);
+        clean(s,stdin);
+        sscanf(s,"%d",&tempRef);
+
+        pthread_mutex_lock(&mutexTemp);
+        temperatureGoal = tempRef;
+        pthread_mutex_unlock(&mutexTemp);
+        printf("New temperature goal registered\n\n");
     }
 }
