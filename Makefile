@@ -9,7 +9,7 @@ OBJ_DIR	= build
 
 all:	$(EXEC)
 
-$(EXEC): $(OBJ_DIR)/sensorsManager.o $(OBJ_DIR)/networkInterface.o $(OBJ_DIR)/main.o
+$(EXEC): $(OBJ_DIR)/sensorsManager.o $(OBJ_DIR)/actuators.o $(OBJ_DIR)/networkInterface.o $(OBJ_DIR)/main.o
 	$(CC) $(CFLAGS) $^ -o $(EXEC) $(LFLAGS)
 
 $(EXEC_OLD): $(OBJ_DIR)/sensorsManager.o $(OBJ_DIR)/actuators.o $(OBJ_DIR)/networkInterface.o $(OBJ_DIR)/lightsManager.o $(OBJ_DIR)/main.o

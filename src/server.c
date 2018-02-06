@@ -1,10 +1,16 @@
 #include "server.h"
 
+struct sockaddr_in clientAddr;
+int gotAddr = 0;
+
+double temperatureGoal = 20;
+
 int main() {
     pthread_t tid[2];
     int err;
 
     err = pthread_create(tid+0, NULL, &listener, NULL);
+    err = pthread_create(tid+1, NULL, &sender, NULL);
 
     pthread_join(tid[0], NULL);
 
@@ -54,7 +60,12 @@ void* listener(void* arg) {
     listen(listenfd,2);
 
     while(1) {
-        connfd = accept(listenfd, (struct sockaddr*)NULL, NULL);
+        if(!gotAddr) {
+            connfd = accept(listenfd, (struct sockaddr*)&clientAddr, NULL);
+            gotAddr = 1;
+        }
+        else
+            connfd = accept(listenfd, (struct sockaddr*)NULL, NULL);
 
         if((n = recv(connfd, &msg, sizeof(msg),0)) < 0) {
             close(connfd);
@@ -62,5 +73,46 @@ void* listener(void* arg) {
         }
 
         printMsg(msg);
+    }
+}
+
+void* sender(void* arg) {
+    // waiting for raspberry address
+    while(!gotAddr) {
+        sleep(5);
+    }
+
+    int sock = 0;
+    int n = 0;
+    struct sockaddr_in servAddr;
+
+    int noError = 1;
+    ActuatorData msg;
+
+    while(noError) {
+        sleep(1);
+
+        msg.type = CHANGE_COLOR;
+        msg.value = 0;
+
+
+        // send data
+        sock = socket(AF_INET, SOCK_STREAM, 0);
+        if(sock == -1) {
+            perror("socket()");
+            continue;
+        }
+
+        servAddr = clientAddr;
+        servAddr.sin_port = htons(SEND_PORT);
+
+        if(connect(sock, (struct sockaddr*)&servAddr, sizeof(servAddr)) < 0) {
+            perror("connect()");
+            continue;
+        }
+
+
+
+        send(sock, &msg, sizeof(msg), 0);
     }
 }

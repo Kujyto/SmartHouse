@@ -17,9 +17,12 @@
 #include "messageDefinition.h"
 
 #define RECV_PORT 5001 // recever port
+#define SEND_PORT 5002
+
 
 void printMsg(AllData msg);
 
 void* listener(void* arg);
+void* sender(void* arg);
 
 #endif
