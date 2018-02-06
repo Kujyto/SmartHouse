@@ -154,6 +154,7 @@ void* commandReceiver(void* arg) {
             close(connfd);
             continue;
         }
+        close(connfd);
 
         handleCommand(msg);
     }
