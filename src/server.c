@@ -93,13 +93,10 @@ void* sender(void* arg) {
     ActuatorData msg;
 
     while(noError) {
-        printf("DEBUG1\n");
-        sleep(1);
+        sleep(5);
 
         msg.type = CHANGE_COLOR;
         msg.value = 0;
-
-        printf("DEBUG2\n");
 
         // send data
         sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -107,8 +104,6 @@ void* sender(void* arg) {
             perror("socket()");
             continue;
         }
-
-        printf("DEBUG3\n");
 
         memset(&servAddr, '0', sizeof(servAddr));
         servAddr.sin_family = AF_INET;
@@ -120,21 +115,14 @@ void* sender(void* arg) {
         }
 
 
-        printf("DEBUG4\n");
-
-
         if(connect(sock, (struct sockaddr*)&servAddr, sizeof(servAddr)) < 0) {
             perror("connect()");
             continue;
         }
 
-        printf("DEBUG5\n");
-
         if(send(sock, &msg, sizeof(msg), 1) < 0) {
             perror("send()");
             continue;
         }
-
-        printf("DEBUG6\n");
     }
 }

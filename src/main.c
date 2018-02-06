@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
     setServerAddr(argv[1]);
 
     err = pthread_create(tid+0, NULL, &sensorsManager, NULL);
-    //err = pthread_create(tid+1, NULL, &updateActuators, NULL);
+    err = pthread_create(tid+1, NULL, &updateActuators, NULL);
     //err = pthread_create(tid+2, NULL, &lightsManager, NULL);
     err = pthread_create(tid+3, NULL, &networkManager, NULL);
     //err = pthread_create(tid+..., NULL, &detectClap, NULL); // does not work
