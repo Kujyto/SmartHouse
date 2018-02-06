@@ -90,11 +90,13 @@ void* sender(void* arg) {
     ActuatorData msg;
 
     while(noError) {
+        printf("DEBUG1\n");
         sleep(1);
 
         msg.type = CHANGE_COLOR;
         msg.value = 0;
 
+        printf("DEBUG2\n");
 
         // send data
         sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -103,15 +105,21 @@ void* sender(void* arg) {
             continue;
         }
 
+        printf("DEBUG3\n");
+
+
         servAddr = clientAddr;
         servAddr.sin_port = htons(SEND_PORT);
+
+        printf("DEBUG4\n");
+
 
         if(connect(sock, (struct sockaddr*)&servAddr, sizeof(servAddr)) < 0) {
             perror("connect()");
             continue;
         }
 
-
+        printf("DEBUG5\n");
 
         send(sock, &msg, sizeof(msg), 0);
     }
