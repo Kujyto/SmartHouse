@@ -120,6 +120,6 @@ void* sender(void* arg) {
             continue;
         }
 
-        send(sock, &msg, sizeof(msg), 1) < 0)
+        send(sock, &msg, sizeof(msg), 1);
     }
 }
