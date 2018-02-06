@@ -157,7 +157,7 @@ void* sender(void* arg) {
         // temperature manager
         msg.type = HEATER;
         msg.value = -1000;
-        pthread_mutex_lick(&mutexTemp);
+        pthread_mutex_lock(&mutexTemp);
         if(temp >= temperatureGoal) {
             if(temp > temperatureGoal + DELTA_TEMP && heater >= 0) {
                 msg.value = -1;
@@ -174,6 +174,7 @@ void* sender(void* arg) {
                 msg.value = 0;
             }
         }
+        pthread_mutex_unlock(&mutexTemp);
 
         if(msg.value > -100)
             send(sock, &msg, sizeof(msg), 0);
