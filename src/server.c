@@ -98,7 +98,7 @@ void* listener(void* arg) {
         }
 
         updateValues(msg);
-        printMsg(msg);
+        //printMsg(msg);
     }
 }
 
@@ -133,7 +133,9 @@ void* sender(void* arg) {
         // send data
         sock = socket(AF_INET, SOCK_STREAM, 0);
         if(sock == -1) {
+#if DEBUG == 1
             perror("socket()");
+#endif
             continue;
         }
 
@@ -142,13 +144,17 @@ void* sender(void* arg) {
         servAddr.sin_port = htons(SEND_PORT);
 
         if(inet_pton(AF_INET, clientAddress, &servAddr.sin_addr) <= 0) {
+#if DEBUG == 1
             perror("inet_pton()");
+#endif
             continue;
         }
 
 
         if(connect(sock, (struct sockaddr*)&servAddr, sizeof(servAddr)) < 0) {
+#if DEBUG == 1
             perror("connect()");
+#endif
             continue;
         }
 
@@ -175,8 +181,10 @@ void* sender(void* arg) {
         }
         pthread_mutex_unlock(&mutexTemp);
 
-        if(msg.value > -100)
+        if(msg.value > -100) {
             send(sock, &msg, sizeof(msg), 0);
+            heater = msg.value;
+        }
 
         // light manager
         msg.type = LUMEN;

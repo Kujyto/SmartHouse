@@ -92,7 +92,9 @@ void* dataSender(void* arg) {
         // send data
         sock = socket(AF_INET, SOCK_STREAM, 0);
         if(sock == -1) {
+#if DEBUG == 1
             perror("socket()");
+#endif
             continue;
         }
 
@@ -101,12 +103,16 @@ void* dataSender(void* arg) {
         servAddr.sin_port = htons(SENDER_PORT);
 
         if(inet_pton(AF_INET, serverAddress, &servAddr.sin_addr) <= 0) {
+#if DEBUG == 1
             perror("inet_pton()");
+#endif
             continue;
         }
 
         if(connect(sock, (struct sockaddr*)&servAddr, sizeof(servAddr)) < 0) {
+#if DEBUG == 1
             perror("connect()");
+#endif
             continue;
         }
 
@@ -150,7 +156,9 @@ void* commandReceiver(void* arg) {
         connfd = accept(listenfd, (struct sockaddr*)NULL, NULL);
 
         if((n = recv(connfd, &msg, sizeof(msg),0)) < 0) {
+#if DEBUG == 1
             perror("recv()");
+#endif
             close(connfd);
             continue;
         }

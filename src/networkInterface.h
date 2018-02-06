@@ -1,6 +1,8 @@
 #ifndef DEF_NETWORK_INTERFACE_H
 #define DEF_NETWORK_INTERFACE_H
 
+#define DEBUG 0
+
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>

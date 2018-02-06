@@ -1,6 +1,8 @@
 #ifndef DEF_SERVER_H
 #define DEF_SERVER_H
 
+#define DEBUG 0
+
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -19,7 +21,7 @@
 #define RECV_PORT 5001 // recever port
 #define SEND_PORT 5002
 
-#define DELTA_TEMP 1
+#define DELTA_TEMP 0.25
 
 #define LIGHT_MIN 50
 #define LIGHT_MAX 200
