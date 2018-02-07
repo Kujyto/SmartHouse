@@ -171,7 +171,8 @@ void* sender(void* arg) {
                 msg.value = 0;
             }
         }
-        else if(temp <= temperatureGoal + DELTA_TEMP/2) {
+
+        if(temp <= temperatureGoal + DELTA_TEMP/2) {
             if(temp < temperatureGoal - DELTA_TEMP && heater <= 0) {
                 msg.value = 1;
             }
