@@ -5,8 +5,9 @@
 
 #define LIGHT_TRANSITION 50
 
-typedef enum Color{RED, GREEN, BLUE} Color;
+typedef enum Color{RED, GREEN, BLUE, WHITE} Color;
 
+void toggleLights();
 void changeColor();
 void setLightTransition(double level);
 void setLightLevel(double level);

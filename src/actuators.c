@@ -2,8 +2,18 @@
 
 static pthread_mutex_t mutexActuators = PTHREAD_MUTEX_INITIALIZER;
 
-Color color = RED;
-uchar lumen = 0;
+Color color = WHITE;
+uchar lumen = 50;
+
+int lightOff = 0;
+
+void toggleLights() {
+    lightOff = 1-lightOff;
+
+    printf("Lights %s\n\n", (!lightOff) ? "On" : "Off");
+
+    setColor(color,lumen);
+}
 
 void changeColor() {
     pthread_mutex_lock(&mutexActuators);
@@ -18,6 +28,9 @@ void changeColor() {
 
     case BLUE:
         color = RED;
+        break;
+
+    case WHITE:
         break;
 
     default:
@@ -60,6 +73,11 @@ void setLightLevel(double level) {
 }
 
 void setColor(Color c, uchar l) {
+    if(lightOff) {
+        ledColorSet(100,100,100);
+        return;
+    }
+
     switch(c) {
     case RED:
         ledColorSet(l,100,100);
@@ -71,6 +89,10 @@ void setColor(Color c, uchar l) {
 
     case BLUE:
         ledColorSet(100,100,l);
+        break;
+
+    case WHITE:
+        ledColorSet(l,l,l);
         break;
 
     default:
@@ -94,8 +116,6 @@ void dualSetColor(int i) {
 }
 
 void* updateActuators(void* arg) {
-    ledInit();
-
     Color curColor = color;
     uchar curLumen = lumen;
     int changed = 1;

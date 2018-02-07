@@ -10,7 +10,6 @@
 #include <stdint.h>
 
 #define PCF 120
-#define SOUND_PIN PCF+1
 #define LUMEN_PIN PCF+0
 
 #define HumiturePin  0
@@ -21,6 +20,8 @@
 #define LedPinRed    4
 #define LedPinGreen  5
 #define LedPinBlue   6
+
+#define ButtonPin    26
 
 #define uchar unsigned char
 

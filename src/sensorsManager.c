@@ -17,6 +17,7 @@ void* sensorsManager(void* arg) {
 
     err = pthread_create(tid+0, NULL, &humitureManager, NULL);
     err = pthread_create(tid+1, NULL, &lumenManager, NULL);
+    err = pthread_create(tid+2, NULL, &buttonManager, NULL);
 
     pthread_join(tid[1],NULL);
 }
@@ -51,6 +52,21 @@ double getTemperature() {
     v = temperature;
     pthread_mutex_unlock(&mutexSensors);
     return v;
+}
+
+void* buttonManager(void* arg) {
+    pinMode(ButtonPin, INPUT);
+
+    while(1) {
+        if(0 == digitalRead(ButtonPin)) {
+            delay(10);
+            if(0 == digitalRead(ButtonPin)) {
+                toggleLights();
+                while(!digitalRead(ButtonPin));
+            }
+        }
+        delay(100);
+    }
 }
 
 void* lumenManager(void* arg) {

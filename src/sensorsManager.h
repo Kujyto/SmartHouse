@@ -16,6 +16,7 @@ double getHumidity();
 double getTemperature();
 
 // private
+void* buttonManager(void* arg);
 void* humitureManager(void* arg);
 void* lumenManager(void* arg);
 
