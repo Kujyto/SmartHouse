@@ -172,7 +172,7 @@ void handleCommand(ActuatorData command) {
     switch(command.type) {
     case LUMEN:
         //printf("lumen\n");
-        setLightLevel(command.value);
+        setLightTransition(command.value);
         break;
 
     case CHANGE_COLOR:

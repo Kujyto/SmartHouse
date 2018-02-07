@@ -3,9 +3,12 @@
 
 #include "definition.h"
 
+#define LIGHT_TRANSITION 50
+
 typedef enum Color{RED, GREEN, BLUE} Color;
 
 void changeColor();
+void setLightTransition(double level);
 void setLightLevel(double level);
 
 void setColor(Color c, uchar l);

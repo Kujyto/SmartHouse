@@ -163,7 +163,7 @@ void* sender(void* arg) {
         msg.type = HEATER;
         msg.value = -1000;
         pthread_mutex_lock(&mutexTemp);
-        if(temp >= temperatureGoal) {
+        if(temp >= temperatureGoal - DELTA_TEMP) {
             if(temp > temperatureGoal + DELTA_TEMP && heater >= 0) {
                 msg.value = -1;
             }
@@ -171,7 +171,7 @@ void* sender(void* arg) {
                 msg.value = 0;
             }
         }
-        else if(temp <= temperatureGoal) {
+        else if(temp <= temperatureGoal + DELTA_TEMP) {
             if(temp < temperatureGoal - DELTA_TEMP && heater <= 0) {
                 msg.value = 1;
             }

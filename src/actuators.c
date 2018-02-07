@@ -26,6 +26,23 @@ void changeColor() {
     pthread_mutex_unlock(&mutexActuators);
 }
 
+void setLightTransition(double level) {
+    pthread_mutex_lock(&mutexActuators);
+    int curLumen = lumen;
+    pthread_mutex_unlock(&mutexActuators);
+
+    int target = 100 * level;
+    while(curLumen != target) {
+        if(curLumen < target)
+            curLumen++;
+        else
+            curLumen--;
+
+        setLightLevel(curLumen / 100.0);
+        delay(LIGHT_TRANSITION);
+    }
+}
+
 void setLightLevel(double level) {
     if(level < 0 || level > 1) {
         fprintf(stderr, "Unacceptable light level value: %f\n", level);
