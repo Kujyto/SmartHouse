@@ -3,7 +3,7 @@
 #include "sensorsManager.h"
 #include "networkInterface.h"
 
-pthread_t tid[4];
+pthread_t tid[2];
 
 int main(int argc, char** argv) {
     if(argc < 2) {
@@ -24,13 +24,11 @@ int main(int argc, char** argv) {
     ledInit();
 
     err = pthread_create(tid+0, NULL, &sensorsManager, NULL);
-//    err = pthread_create(tid+1, NULL, &updateActuators, NULL);
-    err = pthread_create(tid+3, NULL, &networkManager, NULL);
+    err = pthread_create(tid+1, NULL, &networkManager, NULL);
 
 
     if(argc > 2) {
         while(1) {
-            printf("SoundVal: %d\n", getSoundVal());
             printf("LumenVal: %d\n", getLumenVal());
             printf("Humidity: %f\n", getHumidity());
             printf("Temperature: %f\n", getTemperature());

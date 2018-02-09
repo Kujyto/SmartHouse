@@ -1,6 +1,5 @@
 #include "sensorsManager.h"
 
-int soundVal = 0;
 int lumenVal = 0;
 
 double humidity = 0.0;
@@ -20,14 +19,6 @@ void* sensorsManager(void* arg) {
     err = pthread_create(tid+2, NULL, &buttonManager, NULL);
 
     pthread_join(tid[1],NULL);
-}
-
-int getSoundVal() {
-    int v;
-    pthread_mutex_lock(&mutexSensors);
-    v = soundVal;
-    pthread_mutex_unlock(&mutexSensors);
-    return v;
 }
 
 int getLumenVal() {
